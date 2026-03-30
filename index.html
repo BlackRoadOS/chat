@@ -44,13 +44,24 @@ body{background:var(--bg);color:var(--text);font-family:'Space Grotesk',sans-ser
 @keyframes typingDot{0%,100%{opacity:0.3}50%{opacity:1}}
 .footer{text-align:center;padding:8px;font-size:9px;color:var(--muted);font-family:'JetBrains Mono'}
 </style>
+  <script src="https://cdn.jsdelivr.net/npm/emoji-picker-element@^1/index.js"></script>
 </head>
 <body>
 <div class="header">
   <div class="logo"><span class="logo-bar"></span>BlackRoad Chat</div>
   <div class="status"><span class="status-dot"></span><span id="status-text">5 nodes online · 44 models</span></div>
 </div>
+<div class="input-area">
+  <input type="text" id="messageInput" placeholder="Type a message..." />
 
+  <!-- NEW BUTTON -->
+  <button id="emojiBtn">😊</button>
+
+  <button id="sendBtn">Send</button>
+</div>
+
+<!-- Emoji Picker Container -->
+<div id="emojiPicker" style="display:none;"></div>
 <div class="messages" id="messages">
   <div class="welcome">
     <h2>BlackRoad Chat</h2>
@@ -74,6 +85,26 @@ const input = document.getElementById('chat-input');
 const form = document.getElementById('chat-form');
 const sendBtn = document.getElementById('send-btn');
 
+  document.addEventListener("DOMContentLoaded", () => {
+  const emojiBtn = document.getElementById("emojiBtn");
+  const emojiPickerContainer = document.getElementById("emojiPicker");
+  const input = document.getElementById("messageInput");
+
+  // create emoji picker
+  const picker = document.createElement("emoji-picker");
+  emojiPickerContainer.appendChild(picker);
+
+  // toggle picker
+  emojiBtn.addEventListener("click", () => {
+    emojiPickerContainer.style.display =
+      emojiPickerContainer.style.display === "none" ? "block" : "none";
+  });
+
+  // when emoji selected
+  picker.addEventListener("emoji-click", (event) => {
+    input.value += event.detail.unicode;
+  });
+});
 let history = [];
 
 // Fetch fleet status
